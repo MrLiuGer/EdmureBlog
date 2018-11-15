@@ -1,0 +1,42 @@
+div.forFlow {
+    border: 1px solid #ced7ce;
+    border-right: 3px solid #ced7ce;
+    border-bottom: 3px solid #ced7ce;
+    background: #fff;
+    padding: 45px 37px 40px;
+    margin-left: 0;
+    left: 0;
+}
+.postTitle {
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 20px 0 10px;
+}
+a {
+    color: #399ab2;
+    text-decoration: none;
+}
+div.postCon {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.5;
+}
+.c_b_p_desc {
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+    line-height: 1.5;
+}
+.clear {
+    clear: both;
+}
+div.postDesc {
+    border: none;
+}
+.postDesc {
+    border-bottom: 1px dotted #999;
+    color: #999;
+    text-align: right;
+    padding-bottom: 20px;
+}

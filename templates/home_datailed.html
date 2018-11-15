@@ -1,0 +1,99 @@
+{% extends "myblog.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/scvb.css">
+    <style>
+        .comment {
+            margin-left: 30px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="forFlow">
+        <!--done-->
+        {% csrf_token %}
+        <div class="day">
+            <div class="postTitle">
+                <a class="postTitle2"
+                   href="/{{ article.blog.site }}/p/{{ article.nid }}.html">[置顶]{{ article.title }}</a>
+            </div>
+            <div class="postCon">
+                <div class="c_b_p_desc"> {{ article.articledetail.content|safe }}
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="postDesc">posted @ {{ article.create_time|date:"Y-m-d H:i:s" }}<!--2016-10-08 15:30-->
+                {{ article.user.nickname }}<!--昵称-->  阅读({{ article.read_count }}) 评论({{ article.comment_count }})
+                <a href="#" rel="nofollow">编辑</a>
+            </div>
+            <div class="clear"></div>
+            <div class="postSeparator"></div>
+            <div class="clear"></div>
+        </div>
+        <!--end-->
+        <div style="height: auto">
+            <div style="display: inline-block;width: 40px;height: 40px">
+                <a>
+                    <i id="up" class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size: 25px"
+                       nd="{{ article.nid }}" site="{{ article.blog.site }}">{{ article.up_count }}</i>
+                </a>
+            </div>
+            <div style="display: inline-block">
+                <a>
+                    <i id="down" class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size: 25px"
+                       nd="{{ article.nid }}" site="{{ article.blog.site }}">{{ article.down_count }}</i>
+                </a>
+            </div>
+        </div>
+        <div style="height: 30px;">
+            <span class="error-msg"></span>
+        </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script src="/static/js/jquery-1.12.4.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
+    <script>
+        $(function () {
+            addtd();
+
+
+        });
+        function addtd() {
+            $("i.fa").click(function () {
+                var token = $.cookie('csrftoken');
+                var nid = $(this).attr("nd");
+                var site = $(this).attr('site');
+                var top = $(this).attr('id');
+                var tid = 0;
+                if (top == 'up') {
+                    tid = 1
+                }
+                $.ajax({
+                    url: "/dianzhan/",
+                    type: "POST",
+                    headers: {'X-CSRFToken': token},
+                    data: {"tid": tid, 'nid': nid},
+                    success: function (data) {
+                        if (!data) {
+                            if (tid) {
+                                $("#up").text(Number($("#up").text()) + 1)
+                            } else {
+                                $("#down").text(Number($("#down").text()) + 1)
+                            }
+                        } else {
+                            $('.error-msg').text(data)
+                        }
+                    }
+                })
+            })
+        }
+
+
+
+
+    </script>
+{% endblock %}

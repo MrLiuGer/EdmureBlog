@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css">
+    <style>
+        .register{
+             width: 600px;
+            margin: 0 auto;
+             margin-top: 150px;
+        }
+        .imgsr{
+          width: 80px;
+            height: 80px;
+            border-radius: 100%;
+            margin: 0 0 0 112px;
+        }
+
+        }
+          .tou{
+            width: 100%;
+            height: 60px;
+        }
+    </style>
+</head>
+<body>
+
+        <div class="register">
+
+{#        novalidate#}
+{#            action="/registered.html"#}
+        <form class="form-horizontal" method="post"  action="/register.html" novalidate enctype="multipart/form-data">
+         {% csrf_token %}
+            <div class="form-group">
+                <label  class="col-sm-2 control-label"></label>
+                <div class="col-sm-7">
+                <img class="imguper imgsr" src="/static/imgs/avatar/default.png" alt="头像上传" onclick="danji()">
+                    {{ obj.avatar }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">用户</label>
+                <div class="col-sm-7">
+                    {{ obj.username }}{{ obj.errors.username.0 }}{{ msg }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-7">
+                    {{ obj.password }}{{ obj.errors.password.0 }}
+                    <span class="explain1"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">确认</label>
+                <div class="col-sm-7">
+                    {{ obj.passwd2 }} {{ obj.errors.passwd2.0 }}
+                        <span class="explain2"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">昵称</label>
+                    <div class="col-sm-7">
+                        {{ obj.nickname }}{{ obj.errors.nickname.0 }}
+                    </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">邮箱</label>
+                    <div class="col-sm-7">
+                        {{ obj.email }}{{ obj.errors.email.0 }}{{ msg1 }}
+                    </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">验证码</label>
+                    <div class="col-sm-4">
+                        {{ obj.code }}{{ obj.errors.code.0 }} {{ msg2 }}
+                    </div>
+                <div class="col-sm-5">
+                    <img onclick="changeCode(this);" style="width: 130px;height: 35px;" src="/check_code.html" title="切换验证码">
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="submit" class="btn btn-default" value="提交" >
+                </div>
+            </div>
+</form>
+    </div>
+</body>
+
+<script src="/static/js/jquery-1.12.4.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script>
+    $(function(){
+           bindAvatar();
+        });
+    function danji() {
+        $('#imgSelect').click();
+    }
+     function changeCode(ths){
+            ths.src = ths.src + "?";
+        }
+    function bindAvatar(){
+            if(window.URL.createObjectURL){
+                bindAvatar1();
+            }else if(window.FileReader){
+                bindAvatar2()
+            }else{
+                bindAvatar3();
+            }
+        }
+            function bindAvatar1(){
+            $('#imgSelect').change(function(){
+                var obj = $('#imgSelect')[0].files[0];
+                var v = window.URL.createObjectURL(obj);
+            $('.imgsr').attr('src',v);
+            $('.imguper').load(function(){
+                    window.URL.revokeObjectURL(v);
+                });
+
+            })
+        }
+    function bindAvatar2(){
+        $('#imgSelect').change(function(){
+            var obj = $('#imgSelect')[0].files[0];
+            var reader = new FileReader();
+            reader.onload = function(e){
+                $('.imgsr').attr('src',this.result);
+            };
+            reader.readAsDataURL(obj);
+        })
+    }
+    function bindAvatar3() {
+        $('#imgSelect').change(function(){
+            var formData = new FormData();
+            var token = $.cookie('csrftoken');
+            formData.append('avatar',$('#imgSelect')[0].files[0]);
+
+            $.ajax({
+                url: '/upload/',
+                type: 'POST',
+                data: formData,
+                headers:{'X-CSRFToken': token},
+                contentType:false,
+                processData:false,
+                success:function(arg){
+                    var tag = $('.imgsr')[0];
+                    tag.src = arg;
+
+                }
+            })
+        })
+    }
+    
+</script>
+</html>

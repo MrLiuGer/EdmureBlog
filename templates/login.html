@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css">
+    <style>
+        .login{
+            width: 600px;
+            margin: 0 auto;
+             margin-top: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login">
+{#        novalidate#}
+        <form class="form-horizontal" method="post"  novalidate >
+         {% csrf_token %}
+  <div class="form-group">
+    <label  class="col-sm-2 control-label">用户</label>
+    <div class="col-sm-7">
+{#      <input type="text" class="form-control"  placeholder="用户" name="user">#}
+        {{ obj.user }}{{ obj.errors.user.0 }}{{ msg2 }}
+    </div>
+  </div>
+  <div class="form-group">
+    <label  class="col-sm-2 control-label">密码</label>
+    <div class="col-sm-7">
+{#      <input type="password" class="form-control"  placeholder="密码" name="pwd">#}
+        {{ obj.pwd }}{{ obj.errors.pwd.0 }}{{ msg1 }}
+    </div>
+  </div>
+   <div class="form-group">
+    <label  class="col-sm-2 control-label">验证码</label>
+    <div class="col-sm-4">
+{#      <input type="text" class="form-control"  placeholder="验证码" name="code">#}
+        {{ obj.code }}{{ obj.errors.code.0 }}{{ msg3 }}
+    </div>
+       <div class="col-sm-5">
+                  <img onclick="changeCode(this);" style="width: 130px;height: 35px;" src="/check_code.html">
+       </div>
+
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" class="btn btn-default" value="提交" >
+    </div>
+  </div>
+</form>
+    </div>
+</body>
+<script src="/static/js/jquery-1.12.4.js"></script>
+<script>
+    function changeCode(ths) {
+         ths.src = ths.src + "?";
+    }
+</script>
+</html>
