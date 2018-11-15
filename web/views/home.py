@@ -7,8 +7,7 @@ from utils.pagination import Pagination
 from django.urls import reverse
 from django.db.models import Count
 from django.db.models import F
-from django.utils.safestring import mark_safe
-import json
+
 
 
 def index(request, *args, **kwargs):
@@ -50,7 +49,6 @@ def index(request, *args, **kwargs):
 def home(request, site):
     """个人主页"""
     blog = models.Blog.objects.filter(site=site).first()
-
     # Article 连接category通过category_id where blog_id=blog.nid 文章分类表
     category_list = models.Article.objects.filter(blog=blog).values('category_id', 'category__title', ).annotate(
         c=Count('nid'))
@@ -58,11 +56,11 @@ def home(request, site):
     date_list = models.Article.objects.filter(blog=blog).extra(
         # select={'c': "date_format(create_time,'%%Y年%%m月')"}).values('c').annotate(ct=Count('nid'))
         select={'c': "strftime('%%Y年%%m月',create_time)"}).values('c').annotate(ct=Count('nid'))
-    all_count = blog.article_set.all().count()
+    all_count = blog.article_set.all().count() if blog else 0
     urls = request.path_info
     page_info = Pagination(request.GET.get('page'), all_count, 5, 5)
     page_str = page_info.page_str(urls)
-    article_list = blog.article_set.filter(blog=blog).all()[page_info.start:page_info.end]
+    article_list = blog.article_set.filter(blog=blog).all()[page_info.start:page_info.end] if blog else ''
     if not blog:
         return redirect('/')
     return render(request, "home.html",

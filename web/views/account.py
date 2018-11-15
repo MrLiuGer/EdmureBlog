@@ -69,6 +69,7 @@ def registered(request):
         file_obj = request.FILES.get('avatar')
         if file_obj:
             file_path = os.path.join("static\\upimg", file_obj.name)  # static\6.jpg
+            print(file_path)
             with open(file_path, 'wb') as f:
                 for chunk in file_obj.chunks():
                     f.write(chunk)

@@ -11,8 +11,7 @@ class UserInfo(models.Model):
     nickname = models.CharField(verbose_name='昵称', max_length=32)
     email = models.EmailField(verbose_name='邮箱', unique=True)
     avatar = models.ImageField(verbose_name='头像')
-
-    create_time = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
+    create_time = models.DateTimeField(verbose_name='创建时间', auto_now=True)
 
     def __str__(self):
         return self.username

@@ -115,7 +115,7 @@ class RegisterForm(Form):
     )
 
     def __init__(self, request, *args, **kwargs):
-        super(registeredFrom, self).__init__(*args, **kwargs)
+        super(RegisterForm, self).__init__(*args, **kwargs)
         self.request = request
 
     # def clean_code(self):

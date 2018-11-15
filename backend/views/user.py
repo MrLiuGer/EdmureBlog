@@ -36,7 +36,6 @@ def upload_avatar(request):
     ret = {'status': False, 'data': None, 'message': None}
     if request.method == 'POST':
         file_obj = request.FILES.get('avatar_img')
-        print(file_obj)
         if not file_obj:
             pass
         else:
@@ -87,7 +86,7 @@ def article(request, *args, **kwargs):
         else:
             condition[k] = v
     condition['blog_id'] = blog_id
-    print('xssssssssss',condition)
+    # print('xssssssssss',condition)
     data_count = models.Article.objects.filter(**condition).count()
     page = Pagination(request.GET.get('page', 1), data_count)
     result = models.Article.objects.filter(**condition).order_by('-nid').only('nid', 'title','blog').select_related('blog')[page.start:page.end]
